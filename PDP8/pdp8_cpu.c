@@ -378,6 +378,7 @@ uint32 PC, MA;
 uint16 this_Major_State, next_Major_State;
 int32 device, pulse, temp, iot_data;
 t_stat reason;
+int op_code = 0;
 
 /* Restore register state */
 
@@ -408,8 +409,6 @@ reason = 0;
 if (IB = -1)
     IB = IF;
 ////////////////////////////////////////////////////////////////////////////////////
-
-int op_code = 0;
 
 /* Main instruction fetch/decode loop */
 
@@ -523,7 +522,7 @@ while (reason == 0) {                                   /* loop until halted */
                                 int_req = int_req | INT_TSC;        /* request intr */
                             }
                         }
-                        if ((IR & 0200 == 0) &&  sim_idle_enab &&   /* current page? idling enabled? */
+                        if (((IR & 0200) == 0) &&  sim_idle_enab &&   /* current page? idling enabled? */
                             (IF == IB)) {                           /* to same bank? */
                             if (MA == ((PC - 2) & 07777)) {         /* 1) JMP *-1? */
                                 if (!(int_req & (INT_ION|INT_TTI)) &&     /*    iof, TTI flag off? */
